@@ -8,6 +8,10 @@ class Currency:
     """
 
     def __init__(self, name, code, symbol=None, digits=2):
+        self.name = name
+        self.code = code
+        self.symbol = symbol
+        self.digits = digits
         """
         Parameters:
         - name -- the English name of the currency
@@ -18,6 +22,11 @@ class Currency:
         pass
 
     def __str__(self):
+        #this entire method doesn't seem to affect any of the tests...
+        if self.symbol==None:
+            return self.code
+        else:
+            return (self.code, self.symbol)
         """
         Should return the currency code, or code with symbol in parentheses.
         """
@@ -38,6 +47,8 @@ class Money:
     """
 
     def __init__(self, amount, currency):
+        self.amount = amount
+        self.currency = currency
         """
         Parameters:
         - amount -- quantity of currency
@@ -66,6 +77,10 @@ class Money:
                 self.currency == other.currency)
 
     def add(self, other):
+        if self.currency.code == other.currency.code:
+            return Money(self.amount+other.amount, self.currency)
+        else:
+            raise DifferentCurrencyError
         """
         Add two money objects of the same currency. If they have different
         currencies, raise a DifferentCurrencyError.
@@ -73,6 +88,10 @@ class Money:
         pass
 
     def sub(self, other):
+        if self.currency.code == other.currency.code:
+            return Money(self.amount-other.amount, self.currency)
+        else:
+            raise DifferentCurrencyError
         """
         Subtract two money objects of the same currency. If they have different
         currencies, raise a DifferentCurrencyError.
@@ -80,12 +99,14 @@ class Money:
         pass
 
     def mul(self, multiplier):
+        return Money(self.amount*multiplier, self.currency)
         """
         Multiply a money object by a number to get a new money object.
         """
         pass
 
     def div(self, divisor):
+        return Money(self.amount/divisor, self.currency)
         """
         Divide a money object by a number to get a new money object.
         """
